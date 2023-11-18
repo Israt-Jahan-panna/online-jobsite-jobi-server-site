@@ -36,6 +36,23 @@ async function run() {
 run().catch(console.dir);
 
 
+const userCollection = client.db('myuserDB').collection('users')
+
+// user api
+app.get('/users' , async(req , res ) => {
+    const cursor = userCollection.find();
+    const result = await cursor.toArray();
+    res.send(result);
+  })
+  app.post('/users', async (req , res) =>{
+    const users = req.body ;
+    console.log(users);
+    const result = await userCollection.insertOne(users);
+    res.send(result)
+  })
+
+
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
