@@ -9,11 +9,6 @@ const port = process.env.PORT || 4100
 app.use(cors())
 app.use(express.json());
 
-// PtF4TATGvrSyFFzx
-// jobionlinemarketplace
-
-
-
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.j0yhois.mongodb.net/?retryWrites=true&w=majority`;
 console.log(uri)
