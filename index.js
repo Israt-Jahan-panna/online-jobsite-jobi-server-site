@@ -52,11 +52,27 @@ app.get('/users' , async(req , res ) => {
   })
 
 
+// added new job 
+const productCollection = client.db("insertDB").collection("addjob");
+
+app.get('/addjob' , async(req , res ) => {
+  const cursor = productCollection.find();
+  const result = await cursor.toArray();
+  res.send(result);
+})
+app.post('/addjob', async (req , res) =>{
+    const addedNewJob = req.body ;
+    console.log(addedNewJob);
+    const result = await productCollection.insertOne(addedNewJob);
+    res.send(result)
+})
+
+
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('jobi site')
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Jobi app listening on port ${port}`)
 })
