@@ -94,20 +94,47 @@ app.post('/mybids', async (req , res) =>{
   const result = await myBidsCollections.insertOne(myBids)
   res.send(result);
 })
-// for cheeking error 
-app.post('/mybids', async (req, res) => {
-  const myBids = req.body;
-  console.log(myBids);
+//  bids Request 
 
+const bidsRequest = client.db('mybidsDB').collection('bidsRquest');
+
+app.get('/bidsrequest', async (req, res) => {
   try {
-    const result = await myBidsCollections.insertOne(myBids);
-    console.log(result);
+    const cursor = bidsRequest.find();
+    const result = await cursor.toArray();
     res.send(result);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error fetching bids requests:", error);
+    res.status(500).send({ error: "Internal Server Error" });
   }
 });
+
+app.post('/bidsrequest', async (req, res) => {
+  try {
+    const bidsReuest = req.body;
+    console.log(bidsReuest);
+
+    const result = await bidsRequest.insertOne(bidsReuest);
+    res.send(result);
+  } catch (error) {
+    console.error("Error adding bids request:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+});
+// // for cheeking error 
+// app.post('/bidsrequest', async (req, res) => {
+//   const bidsRequest = req.body;
+//   console.log(bidsRequest);
+
+//   try {
+//     const result = await bidsRequest.insertOne(bidsRequest);
+//     console.log(result);
+//     res.send(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 
 app.get('/', (req, res) => {
