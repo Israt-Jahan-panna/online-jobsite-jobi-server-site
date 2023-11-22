@@ -80,6 +80,35 @@ app.get('/jobs/:id', async (req, res) => {
   res.json(job);
 });
  
+// mybids get 
+
+ const myBidsCollections =client.db('mybidsDB').collection('mybids')
+app.get('/mybids', async (req , res)=>{
+  const cursor = myBidsCollections.find();
+  const result = await cursor.toArray();
+  res.send(result)
+})
+app.post('/mybids', async (req , res) =>{
+  const myBids = req.body;
+  console.log(myBids)
+  const result = await myBidsCollections.insertOne(myBids)
+  res.send(result);
+})
+// for cheeking error 
+app.post('/mybids', async (req, res) => {
+  const myBids = req.body;
+  console.log(myBids);
+
+  try {
+    const result = await myBidsCollections.insertOne(myBids);
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.get('/', (req, res) => {
   res.send('jobi site')
