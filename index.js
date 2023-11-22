@@ -2,7 +2,7 @@
 const express = require('express');
 var cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 4100
 // midelwire
@@ -53,21 +53,33 @@ app.get('/users' , async(req , res ) => {
 
 
 // added new job 
-const productCollection = client.db("insertDB").collection("addjob");
+const jobCollection = client.db("insertDB").collection("addjob");
 
-app.get('/addjob' , async(req , res ) => {
-  const cursor = productCollection.find();
+app.get('/jobs' , async(req , res ) => {
+  const cursor = jobCollection.find();
   const result = await cursor.toArray();
   res.send(result);
 })
-app.post('/addjob', async (req , res) =>{
+
+// add new jobs
+app.post('/jobs', async (req , res) =>{
     const addedNewJob = req.body ;
     console.log(addedNewJob);
-    const result = await productCollection.insertOne(addedNewJob);
+    const result = await jobCollection.insertOne(addedNewJob);
     res.send(result)
 })
 
 
+/
+ // Fetch jobs by id
+app.get('/jobs/:id', async (req, res) => {
+  const jobId = req.params.id;
+  console.log(jobId)
+  const query = { _id: new ObjectId(jobId) };
+  const job = await jobCollection.findOne(query);
+  res.json(job);
+});
+ 
 
 app.get('/', (req, res) => {
   res.send('jobi site')
