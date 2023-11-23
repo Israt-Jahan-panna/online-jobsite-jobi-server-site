@@ -78,6 +78,39 @@ app.delete('/jobs/:id' , async(req , res ) =>{
   res.send(result);
 })
 
+
+  // // Update job by ID 
+    app.get('/jobs/:id' , async(req , res ) => {
+      const id =req.params.id ;
+    const query = {_id : new ObjectId (id)}
+    const result = await jobCollection.findOne(query)
+    res.send(result)
+    })
+
+    app.put('/jobs/:id',async(req , res ) =>{
+      const id = req.params.id;
+      const filter = {_id : new ObjectId (id)}
+      const updatePost = req.body;
+      const jobs = {
+        $set:{
+          buyerEmail:updatePost.buyerEmail,
+          jobTitle:updatePost.jobTitle,
+          deadline:updatePost.deadline,
+          description:updatePost.description,
+          shortdescription:updatePost.shortdescription,
+          category:updatePost.category,
+          minPrice:updatePost.minPrice,
+          maxPrice:updatePost.maxPrice
+          
+        }
+      }
+      const result = await jobCollection.updateOne(filter,jobs);
+      res.send(result);
+    })
+
+
+
+
 app.post('/jobs', async (req, res) => {
   try {
       const { buyerEmail, jobTitle, deadline, description, shortdescription, category, minPrice, maxPrice } = req.body;
