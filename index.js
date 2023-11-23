@@ -69,8 +69,31 @@ app.post('/jobs', async (req , res) =>{
     res.send(result)
 })
 
+app.post('/jobs', async (req, res) => {
+  try {
+      const { buyerEmail, jobTitle, deadline, description, shortdescription, category, minPrice, maxPrice } = req.body;
 
-/
+      // Use these values to create the document you want to insert
+      const jobDocument = {
+          buyerEmail,
+          jobTitle,
+          deadline,
+          description,
+          shortdescription,
+          category,
+          minPrice,
+          maxPrice,
+          // You can add other fields as needed
+      };
+
+      const result = await jobCollection.insertOne(jobDocument);
+      res.send(result);
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
  // Fetch jobs by id
 app.get('/jobs/:id', async (req, res) => {
   const jobId = req.params.id;
