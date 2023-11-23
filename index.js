@@ -69,6 +69,15 @@ app.post('/jobs', async (req , res) =>{
     res.send(result)
 })
 
+// delete 
+
+app.delete('/jobs/:id' , async(req , res ) =>{
+  const id =req.params.id ;
+  const query = {_id : new ObjectId (id)}
+  const result = await jobCollection.deleteOne(query);
+  res.send(result);
+})
+
 app.post('/jobs', async (req, res) => {
   try {
       const { buyerEmail, jobTitle, deadline, description, shortdescription, category, minPrice, maxPrice } = req.body;
@@ -82,8 +91,7 @@ app.post('/jobs', async (req, res) => {
           shortdescription,
           category,
           minPrice,
-          maxPrice,
-          // You can add other fields as needed
+          maxPrice
       };
 
       const result = await jobCollection.insertOne(jobDocument);
@@ -93,6 +101,7 @@ app.post('/jobs', async (req, res) => {
       res.status(500).send("Internal Server Error");
   }
 });
+   
 
  // Fetch jobs by id
 app.get('/jobs/:id', async (req, res) => {
@@ -144,20 +153,7 @@ app.post('/bidsrequest', async (req, res) => {
     res.status(500).send({ error: "Internal Server Error" });
   }
 });
-// // for cheeking error 
-// app.post('/bidsrequest', async (req, res) => {
-//   const bidsRequest = req.body;
-//   console.log(bidsRequest);
 
-//   try {
-//     const result = await bidsRequest.insertOne(bidsRequest);
-//     console.log(result);
-//     res.send(result);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 
 app.get('/', (req, res) => {
